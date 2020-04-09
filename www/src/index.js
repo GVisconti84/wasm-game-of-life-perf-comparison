@@ -23,9 +23,9 @@ const ctx = canvas.getContext('2d');
 let animationId = null;
 const renderLoop = () => {
   fps.loopIterationStarted();
-  for (let i = 0; i < 9; i++) {
+  // for (let i = 0; i < 9; i++) {
     universe.tick();
-  }
+  // }
   drawGrid();
   //drawCells();
    drawCellsOptimized();
