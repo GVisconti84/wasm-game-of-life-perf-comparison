@@ -8,7 +8,9 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "wasm-pack-build": "cd .. && wasm-pack build",
+    "wasm-pack-test": "cd .. &&  wasm-pack test --chrome --headless"
   },
   "repository": {
     "type": "git",
