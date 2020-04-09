@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "./tsc_out/",
+    "noImplicitAny": false,
+    "module": "esnext",
+    "target": "es6",
+    "sourceMap": true,
+    "moduleResolution": "Node"
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

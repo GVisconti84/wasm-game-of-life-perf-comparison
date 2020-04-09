@@ -32,6 +32,8 @@
     "wasm-game-of-life-perf-comparison": "file:../pkg"
   },
   "devDependencies": {
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5",
