@@ -1,5 +1,6 @@
 import { Cell, Universe } from 'wasm-game-of-life-perf-comparison';
 import { memory } from 'wasm-game-of-life-perf-comparison/wasm_game_of_life_perf_comparison_bg';
+import { Size } from './common';
 
 const CELL_SIZE = 5; // px
 const GRID_COLOR = '#CCCCCC';
@@ -21,7 +22,7 @@ export class Game {
 
 
   // TODO: Move.
-  public getFrameSize(): {width: number, height: number} {
+  public getFrameSize(): Size {
     return {
       width:  (CELL_SIZE + 1) * this.width  + 1,
       height: (CELL_SIZE + 1) * this.height + 1,

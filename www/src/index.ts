@@ -1,46 +1,78 @@
+import { Size } from './common';
 import { FPS } from './FPS';
 import { Game } from './Game';
 import { GameLoop } from './GameLoop';
 
 
-const game = new Game();
-const canvas = document.getElementById('game-of-life-canvas') as HTMLCanvasElement;
-const cSize = game.getFrameSize();
-canvas.width  = cSize.width;
-canvas.height = cSize.height;
-const ctx = canvas.getContext('2d');
-const gLoop = new GameLoop(game, ctx);
+const CANVAS_ID   = 'canvas';
+const PLAY_BTN_ID = 'play-btn';
+const PERF_ID     = 'perf';
 
-const fpsDomElement = document.getElementById('fps');
-const fps = new FPS(fpsDomElement);
 
-gLoop.onLoopIterationStart = () => fps.loopIterationStarted();
-gLoop.onLoopIterationEnd   = () => fps.loopIterationEnded();
+function main() {
+  const domElements = getDomElements();
+  const game = new Game();
+  const fps = new FPS(domElements.perf);
+  const gLoop = new GameLoop(game, domElements.canvas.getContext('2d'));
 
-const playPauseButton = document.getElementById('play-pause');
+  registerEventHandlers(domElements, game, gLoop);
+  setCanvasSize(domElements.canvas, game.getFrameSize());
 
-playPauseButton.addEventListener('click', event => {
-  if (gLoop.isPaused()) {
-    playPauseButton.textContent = '⏸';
-    gLoop.play();
-  } else {
-    playPauseButton.textContent = '▶';
-    gLoop.pause();
-  }
-});
+  gLoop.onLoopIterationStart = () => fps.loopIterationStarted();
+  gLoop.onLoopIterationEnd = () => fps.loopIterationEnded();
+  gLoop.play();
+}
 
-canvas.addEventListener('click', event => {
-  const boundingRect = canvas.getBoundingClientRect();
 
-  const scaleX = canvas.width / boundingRect.width;
-  const scaleY = canvas.height / boundingRect.height;
+const handlers: {[key in keyof DOMElements]?: (Event) => any} = {};
+function registerEventHandlers(elems: DOMElements, game: Game, gLoop: GameLoop) {
+  let {canvas, playBtn} = elems;
 
-  const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
-  const canvasTop = (event.clientY - boundingRect.top) * scaleY;
+  canvas.addEventListener('click', handlers.canvas = event => {
+    const boundingRect = canvas.getBoundingClientRect();
 
-  game.toggleCellAt(canvasLeft, canvasTop)
+    const scaleX = canvas.width  / boundingRect.width;
+    const scaleY = canvas.height / boundingRect.height;
 
-  game.render(ctx);
-});
+    const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
+    const canvasTop  = (event.clientY - boundingRect.top)  * scaleY;
 
-gLoop.play();
+    game.toggleCellAt(canvasLeft, canvasTop);
+    gLoop.reRender();
+  });
+
+  playBtn.addEventListener('click', handlers.playBtn = event => {
+    if (gLoop.isPaused()) {
+      playBtn.textContent = '⏸';
+      gLoop.play();
+    } else {
+      playBtn.textContent = '▶';
+      gLoop.pause();
+    }
+  });
+}
+
+
+type DOMElements = {
+  canvas:  HTMLCanvasElement,
+  playBtn: HTMLButtonElement,
+  perf:    HTMLElement,
+}
+function getDomElements(): DOMElements {
+  const canvas  = document.getElementById(CANVAS_ID)   as HTMLCanvasElement;
+  const playBtn = document.getElementById(PLAY_BTN_ID) as HTMLButtonElement;
+  const perf    = document.getElementById(PERF_ID);
+
+  return {canvas, playBtn, perf};
+}
+
+
+function setCanvasSize(canvas: HTMLCanvasElement, size: Size): void {
+  canvas.width  = size.width;
+  canvas.height = size.height;
+}
+
+
+main();
+
+

@@ -7,7 +7,7 @@ body {
     justify-content: center;
 }
 
-#fps {
+#perf {
     white-space: pre;
     font-family: monospace;
 }
