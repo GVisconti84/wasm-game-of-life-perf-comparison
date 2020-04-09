@@ -22,6 +22,7 @@ const ctx = canvas.getContext('2d');
 
 let animationId = null;
 const renderLoop = () => {
+  fps.loopIterationStarted();
   for (let i = 0; i < 9; i++) {
     universe.tick();
   }
@@ -132,8 +133,12 @@ const drawCellsOptimized = () => {
 const fps = new class {
   constructor() {
     this.fps = document.getElementById("fps");
+
     this.frames = [];
     this.lastFrameTimeStamp = performance.now();
+
+    this.loopDurationsAveragingBuffer = [];
+    this.loopStartTimeStamp = 0;
   }
 
   render() {
@@ -150,6 +155,12 @@ const fps = new class {
       this.frames.shift();
     }
 
+    let loopDuration = now - this.loopStartTimeStamp;
+    this.loopDurationsAveragingBuffer.push(loopDuration);
+    if (this.loopDurationsAveragingBuffer.length > 100) {
+      this.loopDurationsAveragingBuffer.shift();
+    }
+
     // Find the max, min, and mean of our 100 latest timings.
     let min = Infinity;
     let max = -Infinity;
@@ -161,6 +172,10 @@ const fps = new class {
     }
     let mean = sum / this.frames.length;
 
+    let avgLoopDuration = this.loopDurationsAveragingBuffer
+            .reduce((memo, t) => memo + t, 0)
+        / this.loopDurationsAveragingBuffer.length;
+
     // Render the statistics.
     this.fps.textContent = `
 Frames per Second:
@@ -168,7 +183,13 @@ Frames per Second:
 avg of last 100 = ${Math.round(mean)}
 min of last 100 = ${Math.round(min)}
 max of last 100 = ${Math.round(max)}
+
+Game Loop Duration: ${avgLoopDuration.toFixed(2)}ms (≅ ${Math.round(1000 / avgLoopDuration)} fps)
 `.trim();
+  }
+
+  loopIterationStarted() {
+    this.loopStartTimeStamp = performance.now();
   }
 };
 
