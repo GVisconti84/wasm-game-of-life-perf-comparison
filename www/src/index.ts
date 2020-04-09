@@ -21,7 +21,8 @@ canvas.width = (CELL_SIZE + 1) * width + 1;
 
 const ctx = canvas.getContext('2d');
 
-const fps = new FPS();
+const fpsDomElement = document.getElementById('fps');
+const fps = new FPS(fpsDomElement);
 
 let animationId = null;
 const renderLoop = () => {
@@ -32,7 +33,7 @@ const renderLoop = () => {
   drawGrid();
   //drawCells();
    drawCellsOptimized();
-  fps.render();
+  fps.loopIterationEnded();
 
   animationId = requestAnimationFrame(renderLoop);
 };
