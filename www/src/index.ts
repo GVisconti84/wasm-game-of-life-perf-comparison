@@ -4,7 +4,7 @@ import { GameLoop } from './GameLoop';
 
 
 const game = new Game();
-const canvas = document.getElementById("game-of-life-canvas") as HTMLCanvasElement;
+const canvas = document.getElementById('game-of-life-canvas') as HTMLCanvasElement;
 const cSize = game.getFrameSize();
 canvas.width  = cSize.width;
 canvas.height = cSize.height;
@@ -17,19 +17,19 @@ const fps = new FPS(fpsDomElement);
 gLoop.onLoopIterationStart = () => fps.loopIterationStarted();
 gLoop.onLoopIterationEnd   = () => fps.loopIterationEnded();
 
-const playPauseButton = document.getElementById("play-pause");
+const playPauseButton = document.getElementById('play-pause');
 
-playPauseButton.addEventListener("click", event => {
+playPauseButton.addEventListener('click', event => {
   if (gLoop.isPaused()) {
-    playPauseButton.textContent = "⏸";
+    playPauseButton.textContent = '⏸';
     gLoop.play();
   } else {
-    playPauseButton.textContent = "▶";
+    playPauseButton.textContent = '▶';
     gLoop.pause();
   }
 });
 
-canvas.addEventListener("click", event => {
+canvas.addEventListener('click', event => {
   const boundingRect = canvas.getBoundingClientRect();
 
   const scaleX = canvas.width / boundingRect.width;

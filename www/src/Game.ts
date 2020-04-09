@@ -2,9 +2,9 @@ import { Cell, Universe } from 'wasm-game-of-life-perf-comparison';
 import { memory } from 'wasm-game-of-life-perf-comparison/wasm_game_of_life_perf_comparison_bg';
 
 const CELL_SIZE = 5; // px
-const GRID_COLOR = "#CCCCCC";
-const DEAD_COLOR = "#FFFFFF";
-const ALIVE_COLOR = "#000000";
+const GRID_COLOR = '#CCCCCC';
+const DEAD_COLOR = '#FFFFFF';
+const ALIVE_COLOR = '#000000';
 
 
 export class Game {
