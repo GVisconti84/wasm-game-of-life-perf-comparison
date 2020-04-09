@@ -1,56 +1,31 @@
 import { FPS } from './FPS';
 import { Game } from './Game';
+import { GameLoop } from './GameLoop';
 
 
 const game = new Game();
-
-
 const canvas = document.getElementById("game-of-life-canvas") as HTMLCanvasElement;
 const cSize = game.getFrameSize();
 canvas.width  = cSize.width;
 canvas.height = cSize.height;
-
 const ctx = canvas.getContext('2d');
+const gLoop = new GameLoop(game, ctx);
 
 const fpsDomElement = document.getElementById('fps');
 const fps = new FPS(fpsDomElement);
 
-let animationId = null;
-const renderLoop = () => {
-  fps.loopIterationStarted();
-  // for (let i = 0; i < 9; i++) {
-    game.tick()
-  // }
-  game.render(ctx);
-  fps.loopIterationEnded();
-
-  animationId = requestAnimationFrame(renderLoop);
-};
-
-
-const isPaused = () => {
-  return animationId === null;
-};
-
+gLoop.onLoopIterationStart = () => fps.loopIterationStarted();
+gLoop.onLoopIterationEnd   = () => fps.loopIterationEnded();
 
 const playPauseButton = document.getElementById("play-pause");
 
-const play = () => {
-  playPauseButton.textContent = "⏸";
-  renderLoop();
-};
-
-const pause = () => {
-  playPauseButton.textContent = "▶";
-  cancelAnimationFrame(animationId);
-  animationId = null;
-};
-
 playPauseButton.addEventListener("click", event => {
-  if (isPaused()) {
-    play();
+  if (gLoop.isPaused()) {
+    playPauseButton.textContent = "⏸";
+    gLoop.play();
   } else {
-    pause();
+    playPauseButton.textContent = "▶";
+    gLoop.pause();
   }
 });
 
@@ -68,4 +43,4 @@ canvas.addEventListener("click", event => {
   game.render(ctx);
 });
 
-play();
+gLoop.play();
