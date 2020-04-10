@@ -264,6 +264,11 @@ impl Universe {
 }
 
 
+impl Drop for Universe {
+    fn drop(&mut self) {
+        log!("Dropping Universe");
+    }
+}
 
 
 use std::fmt;

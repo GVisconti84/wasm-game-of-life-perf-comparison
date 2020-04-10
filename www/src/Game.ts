@@ -145,5 +145,10 @@ export class Game {
 
   private getIndex(row, column) {
     return row * this.width + column;
-  };
+  }
+
+
+  public destroy() {
+    this.universe.free();
+  }
 }

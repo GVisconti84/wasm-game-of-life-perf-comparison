@@ -1,8 +1,10 @@
-import { Size } from './common';
+import { DOMElements, EventHandlers, Size } from './common';
 import { FPS } from './FPS';
 import { Game } from './Game';
 import { GameLoop } from './GameLoop';
 
+
+const KILL = true; // Whether to kill the app after 5 seconds.
 
 const CANVAS_ID   = 'canvas';
 const PLAY_BTN_ID = 'play-btn';
@@ -15,17 +17,25 @@ function main() {
   const fps = new FPS(domElements.perf);
   const gLoop = new GameLoop(game, domElements.canvas.getContext('2d'));
 
-  registerEventHandlers(domElements, game, gLoop);
+  const handlers = registerEventHandlers(domElements, game, gLoop);
   setCanvasSize(domElements.canvas, game.getFrameSize());
 
   gLoop.onLoopIterationStart = () => fps.loopIterationStarted();
   gLoop.onLoopIterationEnd = () => fps.loopIterationEnded();
   gLoop.play();
+
+  if (KILL) setTimeout(() => {
+    // This is mostly to test for memory leaks.
+    // Apparently everything gets deallocated correctly.
+    unregisterEventHandlers(domElements, handlers);
+    gLoop.pause();
+    game.destroy();
+  }, 5000);
 }
 
 
-const handlers: {[key in keyof DOMElements]?: (Event) => any} = {};
-function registerEventHandlers(elems: DOMElements, game: Game, gLoop: GameLoop) {
+function registerEventHandlers(elems: DOMElements, game: Game, gLoop: GameLoop): EventHandlers {
+  let handlers: EventHandlers = {};
   let {canvas, playBtn} = elems;
 
   canvas.addEventListener('click', handlers.canvas = event => {
@@ -50,14 +60,17 @@ function registerEventHandlers(elems: DOMElements, game: Game, gLoop: GameLoop) 
       gLoop.pause();
     }
   });
+
+  return handlers;
 }
 
 
-type DOMElements = {
-  canvas:  HTMLCanvasElement,
-  playBtn: HTMLButtonElement,
-  perf:    HTMLElement,
+function unregisterEventHandlers({canvas, playBtn}: DOMElements, handlers: EventHandlers): void {
+  canvas.removeEventListener('click', handlers.canvas);
+  playBtn.removeEventListener('click', handlers.playBtn);
 }
+
+
 function getDomElements(): DOMElements {
   const canvas  = document.getElementById(CANVAS_ID)   as HTMLCanvasElement;
   const playBtn = document.getElementById(PLAY_BTN_ID) as HTMLButtonElement;
