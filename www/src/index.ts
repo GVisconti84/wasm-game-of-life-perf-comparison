@@ -1,6 +1,6 @@
-import { DOMElements, EventHandlers, Size } from './common';
+import { DOMElements, EventHandlers } from './common';
 import { FPS } from './FPS';
-import { Game } from './Game';
+import { JSUniverse } from './JSUniverse';
 import { GameLoop } from './GameLoop';
 import { JSOptimizedRenderer } from './renderers/JSOptimizedRenderer';
 import { Renderer } from './renderers/Renderer';
@@ -15,12 +15,12 @@ const PERF_ID     = 'perf';
 
 function main() {
   const domElements = getDomElements();
-  const game     = new Game();
+  const universe = new JSUniverse();
   const fps      = new FPS(domElements.perf);
-  const renderer = new JSOptimizedRenderer(domElements.canvas, game.getSize());
-  const gLoop    = new GameLoop(game, renderer);
+  const renderer = new JSOptimizedRenderer(domElements.canvas, universe.getSize());
+  const gLoop    = new GameLoop(universe, renderer);
 
-  const handlers = registerEventHandlers(domElements, game, gLoop, renderer);
+  const handlers = registerEventHandlers(domElements, universe, gLoop, renderer);
 
   gLoop.onLoopIterationStart = () => fps.loopIterationStarted();
   gLoop.onLoopIterationEnd   = () => fps.loopIterationEnded();
@@ -31,13 +31,13 @@ function main() {
     // Apparently everything gets deallocated correctly.
     unregisterEventHandlers(domElements, handlers);
     gLoop.pause();
-    game.destroy();
+    universe.destroy();
   }, 5000);
 }
 
 
 function registerEventHandlers(elems: DOMElements,
-                               game: Game,
+                               universe: JSUniverse,
                                gLoop: GameLoop,
                                renderer: Renderer): EventHandlers {
   let handlers: EventHandlers = {};
@@ -55,7 +55,7 @@ function registerEventHandlers(elems: DOMElements,
     const canvasTop  = (event.clientY - boundingRect.top)  * scaleY;
 
     const pos = renderer.getCellAt(canvasLeft, canvasTop)
-    game.toggleCell(pos.row, pos.col);
+    universe.toggleCell(pos.row, pos.col);
     gLoop.reRender();
   });
 

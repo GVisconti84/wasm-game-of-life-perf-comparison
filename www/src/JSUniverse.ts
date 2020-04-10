@@ -3,7 +3,7 @@ import { memory } from 'wasm-game-of-life-perf-comparison/wasm_game_of_life_perf
 import { Size } from './common';
 
 
-export class Game {
+export class JSUniverse {
   private universe: Universe;
   private readonly width:  number;
   private readonly height: number;
@@ -35,7 +35,7 @@ export class Game {
   }
 
 
-  public tick():void {
+  public tick(): void {
     this.universe.tick();
   }
 

@@ -1,11 +1,11 @@
 import { Cell } from 'wasm-game-of-life-perf-comparison';
-import { Game } from '../Game';
+import { JSUniverse } from '../JSUniverse';
 import { JSRenderer } from './JSRenderer';
 import { ALIVE_COLOR, CELL_SIZE, DEAD_COLOR } from './Renderer';
 
 
 export class JSOptimizedRenderer extends JSRenderer {
-  protected drawCells(cells: Uint8Array[Cell], game: Game) {
+  protected drawCells(cells: Uint8Array[Cell], universe: JSUniverse) {
     const ctx = this.ctx;
 
     ctx.beginPath();
@@ -14,7 +14,7 @@ export class JSOptimizedRenderer extends JSRenderer {
     ctx.fillStyle = ALIVE_COLOR;
     for (let row = 0; row < this.height; row++) {
       for (let col = 0; col < this.width; col++) {
-        const idx = game.getCellIndex(row, col);
+        const idx = universe.getCellIndex(row, col);
         if (cells[idx] !== Cell.Alive) {
           continue;
         }
@@ -32,7 +32,7 @@ export class JSOptimizedRenderer extends JSRenderer {
     ctx.fillStyle = DEAD_COLOR;
     for (let row = 0; row < this.height; row++) {
       for (let col = 0; col < this.width; col++) {
-        const idx = game.getCellIndex(row, col);
+        const idx = universe.getCellIndex(row, col);
         if (cells[idx] !== Cell.Dead) {
           continue;
         }

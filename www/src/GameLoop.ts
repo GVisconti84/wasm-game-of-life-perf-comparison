@@ -1,4 +1,4 @@
-import { Game } from './Game';
+import { JSUniverse } from './JSUniverse';
 import { Renderer } from './renderers/Renderer';
 
 
@@ -10,7 +10,7 @@ export class GameLoop {
   private frameRequestId: number | null = null;
 
 
-  constructor(private readonly game: Game,
+  constructor(private readonly universe: JSUniverse,
               private readonly renderer: Renderer) {
     this.loop = this._loop.bind(this);
     this.reRender();  // To be sure to draw the first frame.
@@ -28,7 +28,7 @@ export class GameLoop {
 
 
   public reRender(): void {
-    this.renderer.render(this.game);
+    this.renderer.render(this.universe);
   }
 
 
@@ -50,8 +50,8 @@ export class GameLoop {
 
   private _loop() {
     this.onLoopIterationStart && this.onLoopIterationStart();
-    this.game.tick();
-    this.renderer.render(this.game);
+    this.universe.tick();
+    this.renderer.render(this.universe);
     this.onLoopIterationEnd && this.onLoopIterationEnd();
 
     this.requestAnimationFrame();

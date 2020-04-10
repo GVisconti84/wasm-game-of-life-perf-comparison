@@ -1,6 +1,6 @@
 import { Cell } from 'wasm-game-of-life-perf-comparison';
 import { Size, Position } from '../common';
-import { Game } from '../Game';
+import { JSUniverse } from '../JSUniverse';
 import { ALIVE_COLOR, CELL_SIZE, DEAD_COLOR, GRID_COLOR, Renderer } from './Renderer';
 
 
@@ -10,9 +10,9 @@ export class JSRenderer implements Renderer {
   protected readonly ctx: CanvasRenderingContext2D
 
 
-  constructor(canvas: HTMLCanvasElement, gameSize: Size) {
-    this.width    = gameSize.width;
-    this.height   = gameSize.height;
+  constructor(canvas: HTMLCanvasElement, universeSize: Size) {
+    this.width    = universeSize.width;
+    this.height   = universeSize.height;
 
     const frameSize = this.getFrameSize();
     canvas.width  = frameSize.width;
@@ -38,19 +38,19 @@ export class JSRenderer implements Renderer {
   }
 
 
-  public render(game: Game): void {
+  public render(universe: JSUniverse): void {
     this.drawGrid();
-    this.drawCells(game.getCells(), game);
+    this.drawCells(universe.getCells(), universe);
   }
 
 
-  protected drawCells(cells: Uint8Array[Cell], game: Game) {
+  protected drawCells(cells: Uint8Array[Cell], universe: JSUniverse) {
     const ctx = this.ctx;
     ctx.beginPath();
 
     for (let row = 0; row < this.height; row++) {
       for (let col = 0; col < this.width; col++) {
-        const idx = game.getCellIndex(row, col);
+        const idx = universe.getCellIndex(row, col);
 
         ctx.fillStyle = cells[idx] === Cell.Dead ? DEAD_COLOR : ALIVE_COLOR;
 
