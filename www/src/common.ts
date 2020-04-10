@@ -3,6 +3,11 @@ export type Size = {
   height: number,
 };
 
+export type Position = {
+  row: number,
+  col: number
+}
+
 export type DOMElements = {
   canvas:  HTMLCanvasElement,
   playBtn: HTMLButtonElement,

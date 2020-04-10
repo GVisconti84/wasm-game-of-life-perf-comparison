@@ -2,9 +2,11 @@ import { DOMElements, EventHandlers, Size } from './common';
 import { FPS } from './FPS';
 import { Game } from './Game';
 import { GameLoop } from './GameLoop';
+import { JSOptimizedRenderer } from './renderers/JSOptimizedRenderer';
+import { Renderer } from './renderers/Renderer';
 
 
-const KILL = true; // Whether to kill the app after 5 seconds.
+const KILL = false; // Whether to kill the app after 5 seconds.
 
 const CANVAS_ID   = 'canvas';
 const PLAY_BTN_ID = 'play-btn';
@@ -13,15 +15,15 @@ const PERF_ID     = 'perf';
 
 function main() {
   const domElements = getDomElements();
-  const game = new Game();
-  const fps = new FPS(domElements.perf);
-  const gLoop = new GameLoop(game, domElements.canvas.getContext('2d'));
+  const game     = new Game();
+  const fps      = new FPS(domElements.perf);
+  const renderer = new JSOptimizedRenderer(domElements.canvas, game.getSize());
+  const gLoop    = new GameLoop(game, renderer);
 
-  const handlers = registerEventHandlers(domElements, game, gLoop);
-  setCanvasSize(domElements.canvas, game.getFrameSize());
+  const handlers = registerEventHandlers(domElements, game, gLoop, renderer);
 
   gLoop.onLoopIterationStart = () => fps.loopIterationStarted();
-  gLoop.onLoopIterationEnd = () => fps.loopIterationEnded();
+  gLoop.onLoopIterationEnd   = () => fps.loopIterationEnded();
   gLoop.play();
 
   if (KILL) setTimeout(() => {
@@ -34,7 +36,10 @@ function main() {
 }
 
 
-function registerEventHandlers(elems: DOMElements, game: Game, gLoop: GameLoop): EventHandlers {
+function registerEventHandlers(elems: DOMElements,
+                               game: Game,
+                               gLoop: GameLoop,
+                               renderer: Renderer): EventHandlers {
   let handlers: EventHandlers = {};
   let {canvas, playBtn} = elems;
 
@@ -47,7 +52,8 @@ function registerEventHandlers(elems: DOMElements, game: Game, gLoop: GameLoop):
     const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
     const canvasTop  = (event.clientY - boundingRect.top)  * scaleY;
 
-    game.toggleCellAt(canvasLeft, canvasTop);
+    const pos = renderer.getCellAt(canvasLeft, canvasTop)
+    game.toggleCell(pos.row, pos.col);
     gLoop.reRender();
   });
 
@@ -77,12 +83,6 @@ function getDomElements(): DOMElements {
   const perf    = document.getElementById(PERF_ID);
 
   return {canvas, playBtn, perf};
-}
-
-
-function setCanvasSize(canvas: HTMLCanvasElement, size: Size): void {
-  canvas.width  = size.width;
-  canvas.height = size.height;
 }
 
 

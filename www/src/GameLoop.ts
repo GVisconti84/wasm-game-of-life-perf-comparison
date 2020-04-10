@@ -1,4 +1,5 @@
 import { Game } from './Game';
+import { Renderer } from './renderers/Renderer';
 
 
 export class GameLoop {
@@ -10,7 +11,7 @@ export class GameLoop {
 
 
   constructor(private readonly game: Game,
-              private readonly ctx: CanvasRenderingContext2D) {
+              private readonly renderer: Renderer) {
     this.loop = this._loop.bind(this);
     this.reRender();  // To be sure to draw the first frame.
   }
@@ -27,7 +28,7 @@ export class GameLoop {
 
 
   public reRender(): void {
-    this.game.render(this.ctx);
+    this.renderer.render(this.game);
   }
 
 
@@ -50,7 +51,7 @@ export class GameLoop {
   private _loop() {
     this.onLoopIterationStart && this.onLoopIterationStart();
     this.game.tick();
-    this.game.render(this.ctx);
+    this.renderer.render(this.game);
     this.onLoopIterationEnd && this.onLoopIterationEnd();
 
     this.requestAnimationFrame();
