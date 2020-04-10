@@ -44,6 +44,8 @@ function registerEventHandlers(elems: DOMElements,
   let {canvas, playBtn} = elems;
 
   canvas.addEventListener('click', handlers.canvas = event => {
+    if (!gLoop.isPaused()) return;
+
     const boundingRect = canvas.getBoundingClientRect();
 
     const scaleX = canvas.width  / boundingRect.width;
