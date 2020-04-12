@@ -160,11 +160,6 @@ impl RsRenderer {
 }
 
 
-impl RsRenderer {
-
-}
-
-
 impl Drop for RsRenderer {
     fn drop(&mut self) {
         log!("Dropping RsRenderer");

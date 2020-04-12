@@ -1,4 +1,4 @@
-import { Size, Position } from '../common';
+import { Position } from '../common';
 import { Universe } from '../Universe';
 
 
