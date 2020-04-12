@@ -1,6 +1,7 @@
 import { DOMElements } from './common';
 import { FPS } from './FPS';
 import { Game } from './Game';
+import '../style.less';
 
 
 const KILL = false; // Whether to kill the app after 5 seconds.
