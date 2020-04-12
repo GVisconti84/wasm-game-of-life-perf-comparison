@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+use web_sys::HtmlCanvasElement;
 use crate::universe::{RsUniverse, Cell};
 
 
@@ -22,48 +23,30 @@ struct RsRenderer {
 #[wasm_bindgen]
 impl RsRenderer {
     pub fn new(width: usize, height: usize) -> RsRenderer {
-        RsRenderer {
+        let mut r = RsRenderer {
             width, height,
             framebuffer: vec![]
-        }
+        };
+
+        r.framebuffer.resize(
+            r.get_framebuffer_width() * r.get_framebuffer_height() * 4,
+            255
+        );
+
+        r
     }
 
 
     #[wasm_bindgen(js_name = getFramebuffer)]
     pub fn get_framebuffer(&mut self) -> *const u8 {
-        if self.framebuffer.len() == 0 {
-            log!("Init framebuffer");
-            self.framebuffer = vec![];
-            self.framebuffer.resize(self.get_framebuffer_len(), 255);
-            self.framebuffer[0] = 255;
-            self.framebuffer[1] = 0;
-            self.framebuffer[2] = 0;
-            self.framebuffer[3] = 255;
-        }
-
         return self.framebuffer.as_ptr();
     }
 
 
-    #[wasm_bindgen(js_name = getFramebufferLen)]
-    pub fn get_framebuffer_len(&self) -> usize {
-        self.get_framebuffer_width() * self.get_framebuffer_height() * BPP
-    }
-
-
-    #[wasm_bindgen(js_name = getFramebufferWidth)]
-    pub fn get_framebuffer_width(&self) -> usize {
-        self.width * (CELL_SIZE + CELL_BORDER) + CELL_BORDER
-    }
-
-
-    #[wasm_bindgen(js_name = getFramebufferHeight)]
-    pub fn get_framebuffer_height(&self) -> usize {
-        self.height * (CELL_SIZE + CELL_BORDER) + CELL_BORDER
     #[wasm_bindgen(js_name = setCanvasSize)]
     pub fn set_canvas_size(&self, canvas: HtmlCanvasElement) {
-        canvas.set_width(self.width   as u32);
-        canvas.set_height(self.height as u32);
+        canvas.set_width (self.get_framebuffer_width()  as u32);
+        canvas.set_height(self.get_framebuffer_height() as u32);
     }
 
 
@@ -160,6 +143,18 @@ impl RsRenderer {
             self.framebuffer.copy_within(0..border_len, row_offset);
             row_offset += border_len;
         }
+    }
+}
+
+
+impl RsRenderer {
+    fn get_framebuffer_width(&self) -> usize {
+        self.width * (CELL_SIZE + CELL_BORDER) + CELL_BORDER
+    }
+
+
+    fn get_framebuffer_height(&self) -> usize {
+        self.height * (CELL_SIZE + CELL_BORDER) + CELL_BORDER
     }
 }
 

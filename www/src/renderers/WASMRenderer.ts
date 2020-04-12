@@ -15,10 +15,9 @@ export class WASMRenderer extends RsRenderer implements Renderer{
   {
     super();
     extendFromRust(this, RsRenderer.new(universeSize.width, universeSize.height));
-    canvas.width  = super.getFramebufferWidth();
-    canvas.height = super.getFramebufferHeight();
+    super.setCanvasSize(canvas);
     this.ctx = canvas.getContext('2d');
-    this.imageData = this.getImageData();
+    this.imageData = this.getImageData(canvas.width, canvas.height);
   }
 
 
@@ -37,14 +36,11 @@ export class WASMRenderer extends RsRenderer implements Renderer{
   }
 
 
-  private getImageData(): ImageData {
-    let fbSize = super.getFramebufferLen();
+  private getImageData(width: number, height: number): ImageData {
     let fbPtr  = super.getFramebuffer();
-    let width  = super.getFramebufferWidth();
-    let height = super.getFramebufferHeight();
 
     return new ImageData(
-        new Uint8ClampedArray(memory.buffer, fbPtr, fbSize),
+        new Uint8ClampedArray(memory.buffer, fbPtr, width * height * 4),
         width,
         height
     );
