@@ -60,6 +60,10 @@ impl RsRenderer {
     #[wasm_bindgen(js_name = getFramebufferHeight)]
     pub fn get_framebuffer_height(&self) -> usize {
         self.height * (CELL_SIZE + CELL_BORDER) + CELL_BORDER
+    #[wasm_bindgen(js_name = setCanvasSize)]
+    pub fn set_canvas_size(&self, canvas: HtmlCanvasElement) {
+        canvas.set_width(self.width   as u32);
+        canvas.set_height(self.height as u32);
     }
 
 
