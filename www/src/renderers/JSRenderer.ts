@@ -87,4 +87,7 @@ export class JSRenderer implements Renderer {
 
     ctx.stroke();
   }
+
+
+  destroy() {}
 }

@@ -12,4 +12,5 @@ export interface Renderer {
   getCellAt(x: number, y: number): Position;
   getFrameSize(): Size;
   render(universe: JSUniverse): void;
+  destroy(): void;
 }

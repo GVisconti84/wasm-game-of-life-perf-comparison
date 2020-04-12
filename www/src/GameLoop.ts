@@ -10,8 +10,8 @@ export class GameLoop {
   private frameRequestId: number | null = null;
 
 
-  constructor(private readonly universe: JSUniverse,
-              private readonly renderer: Renderer) {
+  constructor(protected readonly universe: JSUniverse,
+              protected readonly renderer: Renderer) {
     this.loop = this._loop.bind(this);
     this.reRender();  // To be sure to draw the first frame.
   }
@@ -37,6 +37,12 @@ export class GameLoop {
   }
 
 
+  public setOnLoopStartEnd(start: () => any, end: () => any): void {
+    this.onLoopIterationStart = start;
+    this.onLoopIterationEnd   = end;
+  }
+
+
   private cancelAnimationFrame() {
     window.cancelAnimationFrame(this.frameRequestId);
     this.frameRequestId = null;
@@ -55,5 +61,12 @@ export class GameLoop {
     this.onLoopIterationEnd && this.onLoopIterationEnd();
 
     this.requestAnimationFrame();
+  }
+
+
+  destroy() {
+    this.pause();
+    this.onLoopIterationStart = null;
+    this.onLoopIterationEnd   = null;
   }
 }
