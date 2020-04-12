@@ -1,13 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="utf-8">
     <title>Hello wasm-pack!</title>
-  </head>
-  <body>
-    <div id="perf"></div>
-    <canvas id="canvas"></canvas>
-    <button id="play-btn">⏸</button>
     <script src="./bootstrap.js"></script>
+  </head>
+
+  <body>
+    <form>
+      <section>
+        <h3>Renderer:</h3>
+        <label>
+          <input type="radio" value="JSRenderer" name="renderer" checked>
+          Javascript
+        </label>
+        <label>
+          <input type="radio" value="JSOptimizedRenderer" name="renderer">
+          Javascript, optimized
+        </label>
+      </section>
+      <section>
+        <div id="perf"></div>
+      </section>
+    </form>
+    <div class="game-container">
+      <canvas id="canvas"></canvas>
+      <button id="play-btn">⏸</button>
+    </div>
   </body>
+
 </html>

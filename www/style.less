@@ -1,13 +1,60 @@
-body {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+input, label {
+  cursor: pointer;
+}
+
+html {
+  .flexColumn();
+  justify-content: center;
+
+  body {
+    .flexRow();
+    margin: 0;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
+    height: auto;
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-self: stretch;
+
+      section {
+        .flexColumn();
+      }
+
+      section:last-child {
+        flex-grow: 1;
+        justify-content: flex-end;
+      }
+    }
+
+    .game-container {
+      .flexColumn();
+      align-items: center;
+
+      canvas {
+        margin-bottom: 10px;
+      }
+    }
+  }
 }
 
 #perf {
-    white-space: pre;
-    font-family: monospace;
+  white-space: pre;
+  font-family: monospace;
 }

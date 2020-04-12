@@ -31,11 +31,13 @@ function main() {
 
 
 function getDomElements(): DOMElements {
-  const canvas  = document.getElementById(CANVAS_ID)   as HTMLCanvasElement;
-  const playBtn = document.getElementById(PLAY_BTN_ID) as HTMLButtonElement;
-  const perf    = document.getElementById(PERF_ID);
+  const canvas   = document.getElementById(CANVAS_ID)   as HTMLCanvasElement;
+  const playBtn  = document.getElementById(PLAY_BTN_ID) as HTMLButtonElement;
+  const perf     = document.getElementById(PERF_ID);
+  const form     = document.querySelector('form');
+  // const renderer = document.querySelector('input[name="renderer"]') as HTMLInputElement;
 
-  return {canvas, playBtn, perf};
+  return {canvas, playBtn, perf, form};
 }
 
 

@@ -1,7 +1,13 @@
 import { DOMElements, EventHandlers } from './common';
 import { GameLoop } from './GameLoop';
 import { JSUniverse } from './JSUniverse';
+import { JSRenderer } from './renderers/JSRenderer';
 import { JSOptimizedRenderer } from './renderers/JSOptimizedRenderer';
+
+const RendererClass = {
+  'JSRenderer':          JSRenderer,
+  'JSOptimizedRenderer': JSOptimizedRenderer
+}
 
 
 export class Game extends GameLoop {
@@ -11,7 +17,11 @@ export class Game extends GameLoop {
 
   constructor(domElements: DOMElements) {
     const universe = new JSUniverse();
-    const renderer = new JSOptimizedRenderer(domElements.canvas, universe.getSize());
+
+    let form = domElements.form;
+    const Renderer = RendererClass[Game.getFormValue(form, 'renderer')];
+    const renderer = new Renderer(domElements.canvas, universe.getSize());
+
     super(universe, renderer);
 
     this.domElements = domElements;
@@ -20,8 +30,21 @@ export class Game extends GameLoop {
   }
 
 
+  private static getFormValue(form, fieldName) {
+    let formData = new FormData(form);
+    return formData.get(fieldName) as string;
+  }
+
+
+  private onRendererChanged(newRenderer) {
+    this.renderer.destroy();
+    const Renderer = RendererClass[newRenderer];
+    this.renderer = new Renderer(this.domElements.canvas, this.universe.getSize())
+  }
+
+
   private registerEventHandlers() {
-    let {canvas, playBtn} = this.domElements;
+    let {canvas, playBtn, form} = this.domElements;
 
     canvas.addEventListener('click', this.handlers.canvas = event => {
       if (!this.isPaused()) return;
@@ -48,12 +71,22 @@ export class Game extends GameLoop {
         this.pause();
       }
     });
+
+    form.addEventListener('change', this.handlers.form = event => {
+      let changedField = event.target.name;
+      let newValue     = Game.getFormValue(form, changedField);
+      switch (event.target.name) {
+        case 'renderer':
+          this.onRendererChanged(newValue);
+      }
+    });
   }
 
 
   private unregisterEventHandlers(): void {
-    this.domElements.canvas.removeEventListener('click',  this.handlers.canvas);
+    this.domElements.canvas .removeEventListener('click', this.handlers.canvas);
     this.domElements.playBtn.removeEventListener('click', this.handlers.playBtn);
+    this.domElements.form   .removeEventListener('click', this.handlers.form);
   }
 
 

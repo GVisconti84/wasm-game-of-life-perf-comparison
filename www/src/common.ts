@@ -12,6 +12,7 @@ export type DOMElements = {
   canvas:  HTMLCanvasElement,
   playBtn: HTMLButtonElement,
   perf:    HTMLElement,
+  form:    HTMLFormElement
 };
 
 export type EventHandlers = {

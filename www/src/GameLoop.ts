@@ -11,7 +11,7 @@ export class GameLoop {
 
 
   constructor(protected readonly universe: JSUniverse,
-              protected readonly renderer: Renderer) {
+              protected          renderer: Renderer) {
     this.loop = this._loop.bind(this);
     this.reRender();  // To be sure to draw the first frame.
   }
