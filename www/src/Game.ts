@@ -1,12 +1,15 @@
 import { DOMElements, EventHandlers } from './common';
 import { GameLoop } from './GameLoop';
-import { JSUniverse } from './JSUniverse';
+import { Universe } from './Universe';
+import { WASMRenderer } from './renderers/WASMRenderer';
 import { JSRenderer } from './renderers/JSRenderer';
 import { JSOptimizedRenderer } from './renderers/JSOptimizedRenderer';
 
+
 const RendererClass = {
+  'WASMRenderer':        WASMRenderer,
+  'JSOptimizedRenderer': JSOptimizedRenderer,
   'JSRenderer':          JSRenderer,
-  'JSOptimizedRenderer': JSOptimizedRenderer
 }
 
 
@@ -16,7 +19,7 @@ export class Game extends GameLoop {
 
 
   constructor(domElements: DOMElements) {
-    const universe = new JSUniverse();
+    const universe = new Universe();
 
     let form = domElements.form;
     const Renderer = RendererClass[Game.getFormValue(form, 'renderer')];

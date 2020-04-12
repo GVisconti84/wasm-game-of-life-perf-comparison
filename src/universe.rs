@@ -1,8 +1,5 @@
-
-#[macro_use]  // <-- unneeded, but makes CLion happy 🤷‍♂️
-use crate::utils;
-
 use wasm_bindgen::prelude::*;
+use crate::utils;
 
 
 #[wasm_bindgen]
@@ -27,15 +24,15 @@ impl Cell {
 
 
 #[wasm_bindgen]
-pub struct Universe {
+pub struct RsUniverse {
     width:  u32,
     height: u32,
     cells: Vec<Cell>,
 }
 
 
-impl Universe {
-    fn get_index(&self, row: u32, column: u32) -> usize {
+impl RsUniverse {
+    pub fn get_index(&self, row: u32, column: u32) -> usize {
         (row * self.width + column) as usize
     }
 
@@ -117,8 +114,8 @@ impl Universe {
 use crate::utils::Timer;
 /// Public methods, exported to JavaScript.
 #[wasm_bindgen]
-impl Universe {
-    pub fn new() -> Universe {
+impl RsUniverse {
+    pub fn new() -> RsUniverse {
         utils::set_panic_hook();
 
         let width = 128;
@@ -134,7 +131,7 @@ impl Universe {
             })
             .collect();
 
-        Universe {
+        RsUniverse {
             width,
             height,
             cells,
@@ -142,6 +139,7 @@ impl Universe {
     }
 
 
+    #[wasm_bindgen(js_name = getCells)]
     pub fn cells(&self) -> *const Cell {
         self.cells.as_ptr()
     }
@@ -160,6 +158,7 @@ impl Universe {
     /// Set the height of the universe.
     ///
     /// Resets all cells to the dead state.
+    #[wasm_bindgen(js_name = setHeight)]
     pub fn set_height(&mut self, height: u32) {
         self.height = height;
         self.cells = (0..self.width * height).map(|_i| Cell::Dead).collect();
@@ -197,6 +196,7 @@ impl Universe {
                         cell,
                         live_neighbors
                     );*/
+
                     let next_cell = match (cell, live_neighbors) {
                         // Rule 1: Any live cell with fewer than two live neighbours
                         // dies, as if caused by underpopulation.
@@ -226,6 +226,7 @@ impl Universe {
     }
 
 
+    #[wasm_bindgen(js_name = toggleCell)]
     pub fn toggle_cell(&mut self, row: u32, column: u32) {
         let idx = self.get_index(row, column);
         self.cells[idx].toggle();
@@ -238,7 +239,7 @@ impl Universe {
 }
 
 
-impl Universe {
+impl RsUniverse {
     /// Get the dead and alive values of the entire universe.
     pub fn get_cells(&self) -> &[Cell] {
         &self.cells
@@ -256,15 +257,15 @@ impl Universe {
 }
 
 
-impl Drop for Universe {
+impl Drop for RsUniverse {
     fn drop(&mut self) {
-        log!("Dropping Universe");
+        log!("Dropping RsUniverse");
     }
 }
 
 
 use std::fmt;
-impl fmt::Display for Universe {
+impl fmt::Display for RsUniverse {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for line in self.cells.as_slice().chunks(self.width as usize) {
             for &cell in line {

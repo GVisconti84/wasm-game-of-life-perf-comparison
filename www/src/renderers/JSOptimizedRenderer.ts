@@ -1,11 +1,11 @@
 import { Cell } from 'wasm-game-of-life-perf-comparison';
-import { JSUniverse } from '../JSUniverse';
+import { Universe } from '../Universe';
 import { JSRenderer } from './JSRenderer';
 import { ALIVE_COLOR, CELL_SIZE, DEAD_COLOR } from './Renderer';
 
 
 export class JSOptimizedRenderer extends JSRenderer {
-  protected drawCells(cells: Uint8Array[Cell], universe: JSUniverse) {
+  protected drawCells(cells: Uint8Array[Cell], universe: Universe) {
     const ctx = this.ctx;
 
     ctx.beginPath();

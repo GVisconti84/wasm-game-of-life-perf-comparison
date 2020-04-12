@@ -4,7 +4,10 @@
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+
+#[macro_use]  // <-- unneeded, but makes CLion happy 🤷‍♂️
 mod utils;
 pub mod universe;
+pub mod renderer;
 
 

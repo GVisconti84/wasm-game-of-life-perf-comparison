@@ -1,5 +1,5 @@
-import { JSUniverse } from './JSUniverse';
 import { Renderer } from './renderers/Renderer';
+import { Universe } from './Universe';
 
 
 export class GameLoop {
@@ -10,7 +10,7 @@ export class GameLoop {
   private frameRequestId: number | null = null;
 
 
-  constructor(protected readonly universe: JSUniverse,
+  constructor(protected readonly universe: Universe,
               protected          renderer: Renderer) {
     this.loop = this._loop.bind(this);
     this.reRender();  // To be sure to draw the first frame.

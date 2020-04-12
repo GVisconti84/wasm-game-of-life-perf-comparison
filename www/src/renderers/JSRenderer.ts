@@ -1,6 +1,6 @@
 import { Cell } from 'wasm-game-of-life-perf-comparison';
 import { Size, Position } from '../common';
-import { JSUniverse } from '../JSUniverse';
+import { Universe } from '../Universe';
 import { ALIVE_COLOR, CELL_SIZE, DEAD_COLOR, GRID_COLOR, Renderer } from './Renderer';
 
 
@@ -30,21 +30,13 @@ export class JSRenderer implements Renderer {
   }
 
 
-  public getFrameSize(): Size {
-    return {
-      width:  (CELL_SIZE + 1) * this.width  + 1,
-      height: (CELL_SIZE + 1) * this.height + 1,
-    };
-  }
-
-
-  public render(universe: JSUniverse): void {
+  public render(universe: Universe): void {
     this.drawGrid();
     this.drawCells(universe.getCells(), universe);
   }
 
 
-  protected drawCells(cells: Uint8Array[Cell], universe: JSUniverse) {
+  protected drawCells(cells: Uint8Array[Cell], universe: Universe) {
     const ctx = this.ctx;
     ctx.beginPath();
 
@@ -86,6 +78,14 @@ export class JSRenderer implements Renderer {
     }
 
     ctx.stroke();
+  }
+
+
+  private getFrameSize(): Size {
+    return {
+      width:  (CELL_SIZE + 1) * this.width  + 1,
+      height: (CELL_SIZE + 1) * this.height + 1,
+    };
   }
 
 

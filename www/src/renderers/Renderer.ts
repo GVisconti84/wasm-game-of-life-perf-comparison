@@ -1,5 +1,5 @@
 import { Size, Position } from '../common';
-import { JSUniverse } from '../JSUniverse';
+import { Universe } from '../Universe';
 
 
 export const CELL_SIZE   =  5; // px
@@ -10,7 +10,6 @@ export const ALIVE_COLOR = '#000000';
 
 export interface Renderer {
   getCellAt(x: number, y: number): Position;
-  getFrameSize(): Size;
-  render(universe: JSUniverse): void;
+  render(universe: Universe): void;
   destroy(): void;
 }

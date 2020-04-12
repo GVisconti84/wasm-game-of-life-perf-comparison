@@ -19,3 +19,8 @@ export type EventHandlers = {
   [key in keyof DOMElements]?: (Event) => any
 };
 
+export function extendFromRust(child: any, parent: any) {
+  // TODO: add some checks.
+  child.ptr = parent.ptr;
+}
+
