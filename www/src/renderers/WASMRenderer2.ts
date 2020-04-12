@@ -1,11 +1,11 @@
-import { RsRenderer } from 'wasm-game-of-life-perf-comparison';
+import { RsRenderer2 } from 'wasm-game-of-life-perf-comparison';
 import { memory } from 'wasm-game-of-life-perf-comparison/wasm_game_of_life_perf_comparison_bg';
 import { extendFromRust, Size, Position} from '../common';
 import { Universe } from '../Universe';
 import { CELL_SIZE, Renderer } from './Renderer';
 
 
-export class WASMRenderer extends RsRenderer implements Renderer{
+export class WASMRenderer2 extends RsRenderer2 implements Renderer {
   private readonly ctx:       CanvasRenderingContext2D;
   private readonly imageData: ImageData;
 
@@ -14,7 +14,7 @@ export class WASMRenderer extends RsRenderer implements Renderer{
               private readonly universeSize: Size)
   {
     super();
-    extendFromRust(this, RsRenderer.new(universeSize.width, universeSize.height));
+    extendFromRust(this, RsRenderer2.new(universeSize.width, universeSize.height));
     super.setCanvasSize(canvas);
     this.ctx = canvas.getContext('2d');
     this.imageData = this.getImageData(canvas.width, canvas.height);

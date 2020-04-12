@@ -13,7 +13,7 @@ const ALIVE_COLOR: &'static [u8] = &[ 22,  22,  22, 255];
 
 
 #[wasm_bindgen]
-struct RsRenderer {
+struct RsRenderer2 {
     width:  usize,
     height: usize,
     framebuffer: Vec<u8>
@@ -21,9 +21,9 @@ struct RsRenderer {
 
 
 #[wasm_bindgen]
-impl RsRenderer {
-    pub fn new(width: usize, height: usize) -> RsRenderer {
-        let mut r = RsRenderer {
+impl RsRenderer2 {
+    pub fn new(width: usize, height: usize) -> RsRenderer2 {
+        let mut r = RsRenderer2 {
             width, height,
             framebuffer: vec![]
         };
@@ -147,7 +147,7 @@ impl RsRenderer {
 }
 
 
-impl RsRenderer {
+impl RsRenderer2 {
     fn get_framebuffer_width(&self) -> usize {
         self.width * (CELL_SIZE + CELL_BORDER) + CELL_BORDER
     }
@@ -159,7 +159,7 @@ impl RsRenderer {
 }
 
 
-impl Drop for RsRenderer {
+impl Drop for RsRenderer2 {
     fn drop(&mut self) {
         log!("Dropping RsRenderer");
     }
