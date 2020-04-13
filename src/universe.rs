@@ -25,19 +25,19 @@ impl Cell {
 
 #[wasm_bindgen]
 pub struct RsUniverse {
-    width:  u32,
-    height: u32,
+    width:  usize,
+    height: usize,
     cells: Vec<Cell>,
 }
 
 
 impl RsUniverse {
-    pub fn get_index(&self, row: u32, column: u32) -> usize {
-        (row * self.width + column) as usize
+    pub fn get_index(&self, row: usize, column: usize) -> usize {
+        (row * self.width + column)
     }
 
 
-    fn live_neighbor_count(&self, row: u32, column: u32) -> u8 {
+    fn live_neighbor_count(&self, row: usize, column: usize) -> u8 {
         let mut count = 0;
         for delta_row in [self.height - 1, 0, 1].iter().cloned() {
             for delta_col in [self.width - 1, 0, 1].iter().cloned() {
@@ -55,7 +55,7 @@ impl RsUniverse {
     }
 
 
-    fn live_neighbor_count_optimized(&self, row: u32, column: u32) -> u8 {
+    fn live_neighbor_count_optimized(&self, row: usize, column: usize) -> u8 {
         let mut count = 0;
 
         let north = if row == 0 {
@@ -144,7 +144,7 @@ impl RsUniverse {
     }
 
 
-    pub fn height(&self) -> u32 {
+    pub fn height(&self) -> usize {
         self.height
     }
 
@@ -158,7 +158,7 @@ impl RsUniverse {
     ///
     /// Resets all cells to the dead state.
     #[wasm_bindgen(js_name = setHeight)]
-    pub fn set_height(&mut self, height: u32) {
+    pub fn set_height(&mut self, height: usize) {
         self.height = height;
         self.cells = (0..self.width * height).map(|_i| Cell::Dead).collect();
     }
@@ -167,7 +167,7 @@ impl RsUniverse {
     /// Set the width of the universe.
     ///
     /// Resets all cells to the dead state.
-    pub fn set_width(&mut self, width: u32) {
+    pub fn set_width(&mut self, width: usize) {
         self.width = width;
         self.cells = (0..width * self.height).map(|_i| Cell::Dead).collect();
     }
@@ -226,13 +226,13 @@ impl RsUniverse {
 
 
     #[wasm_bindgen(js_name = toggleCell)]
-    pub fn toggle_cell(&mut self, row: u32, column: u32) {
+    pub fn toggle_cell(&mut self, row: usize, column: usize) {
         let idx = self.get_index(row, column);
         self.cells[idx].toggle();
     }
 
 
-    pub fn width(&self) -> u32 {
+    pub fn width(&self) -> usize {
         self.width
     }
 }
@@ -247,7 +247,7 @@ impl RsUniverse {
 
     /// Set cells to be alive in a universe by passing the row and column
     /// of each cell as an array.
-    pub fn set_cells(&mut self, cells: &[(u32, u32)]) {
+    pub fn set_cells(&mut self, cells: &[(usize, usize)]) {
         for (row, col) in cells.iter().cloned() {
             let idx = self.get_index(row, col);
             self.cells[idx] = Cell::Alive;
@@ -266,7 +266,7 @@ impl Drop for RsUniverse {
 use std::fmt;
 impl fmt::Display for RsUniverse {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for line in self.cells.as_slice().chunks(self.width as usize) {
+        for line in self.cells.as_slice().chunks(self.width) {
             for &cell in line {
                 let symbol = if cell == Cell::Dead { '◻' } else { '◼' };
                 write!(f, "{}", symbol)?;

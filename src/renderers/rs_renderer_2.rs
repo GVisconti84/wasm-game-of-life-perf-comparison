@@ -40,7 +40,7 @@ impl RsRenderer2 for RsRenderer {
             for col in 0..self.width {
                 let idx = row_offset + col_offset;
 
-                let cell_idx = universe.get_index(row as u32, col as u32);
+                let cell_idx = universe.get_index(row, col);
 
                 let mut byte_offset = 0;  // TODO: we probably don't need three different offsets.
                 for _i in 0..CELL_SIZE {

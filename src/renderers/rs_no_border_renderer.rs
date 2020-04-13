@@ -38,7 +38,7 @@ impl RsNoBorderRenderer for RsRenderer {
             cell_offset += CELL_BORDER * BPP;
 
             for col in 0..self.width {
-                let color = match cells[universe.get_index(row as u32, col as u32)] {
+                let color = match cells[universe.get_index(row, col)] {
                     Cell::Dead  => DEAD_COLOR,
                     Cell::Alive => ALIVE_COLOR,
                 };
