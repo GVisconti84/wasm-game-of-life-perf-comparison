@@ -10,7 +10,7 @@ pub trait RsDummyRendererFloat {
 
 
 impl RsDummyRendererFloat for RsRenderer {
-    fn render(&mut self, universe: &RsUniverse) {
+    fn render(&mut self, _universe: &RsUniverse) {
         let fb_width = self.get_framebuffer_width();
         let fb_height = self.get_framebuffer_height();
         let pitch = BPP * fb_width;

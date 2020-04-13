@@ -3,13 +3,25 @@ use super::RsRenderer;
 use super::consts::*;
 
 
-pub trait RsNoBorderRenderer {
+const DEAD_COLOR_U32:  u32 =
+        ((DEAD_COLOR [3] as u32) << 24) +
+        ((DEAD_COLOR [2] as u32) << 16) +
+        ((DEAD_COLOR [1] as u32) <<  8) +
+        ((DEAD_COLOR [0] as u32) <<  0);
+const ALIVE_COLOR_U32: u32 =
+        ((ALIVE_COLOR[3] as u32) << 24) +
+        ((ALIVE_COLOR[2] as u32) << 16) +
+        ((ALIVE_COLOR[1] as u32) <<  8) +
+        ((ALIVE_COLOR[0] as u32) <<  0);
+
+
+pub trait RsNoBorderU32Renderer {
     fn new_filled(width: usize, height: usize) -> Self;
     fn render(&mut self, universe: &RsUniverse);
 }
 
 
-impl RsNoBorderRenderer for RsRenderer {
+impl RsNoBorderU32Renderer for RsRenderer {
     fn new_filled(width: usize, height: usize) -> RsRenderer {
         let mut r = RsRenderer::new(width, height);
 
@@ -28,35 +40,38 @@ impl RsNoBorderRenderer for RsRenderer {
 
     fn render(&mut self, universe: &RsUniverse) {
         let cells = universe.get_cells();
-        let pitch = self.get_framebuffer_width() * BPP;
+        let pitch = self.get_framebuffer_width();
+
+        let framebuffer;
+        unsafe {
+            let (_, f, _) = self.framebuffer.align_to_mut::<u32>();
+            framebuffer = f;
+        }
 
         let mut cell_offset = CELL_BORDER * pitch;
 
         for row in 0..self.height {
-            cell_offset += CELL_BORDER * BPP;
+            cell_offset += CELL_BORDER;
 
             for col in 0..self.width {
                 let color = match cells[universe.get_index(row, col)] {
-                    Cell::Dead  => DEAD_COLOR,
-                    Cell::Alive => ALIVE_COLOR,
+                    Cell::Dead  => DEAD_COLOR_U32,
+                    Cell::Alive => ALIVE_COLOR_U32,
                 };
 
                 for i in 0..CELL_SIZE {
-                    self.framebuffer[cell_offset + i * BPP + 0] = color[0];
-                    self.framebuffer[cell_offset + i * BPP + 1] = color[1];
-                    self.framebuffer[cell_offset + i * BPP + 2] = color[2];
-                    // Skip the alpha channel, it's always 255.
+                    framebuffer[cell_offset + i] = color;
                 }
 
                 for i in 1..CELL_SIZE {
-                    self.framebuffer.copy_within(
-                        cell_offset..cell_offset + CELL_SIZE * BPP,
+                    framebuffer.copy_within(
+                        cell_offset..cell_offset + CELL_SIZE,
                         cell_offset + i * pitch
                     );
                 }
 
 
-                cell_offset += (CELL_SIZE + CELL_BORDER) * BPP;
+                cell_offset += CELL_SIZE + CELL_BORDER;
             }
 
             cell_offset += (CELL_SIZE-1 + CELL_BORDER) * pitch;

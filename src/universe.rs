@@ -33,7 +33,7 @@ pub struct RsUniverse {
 
 impl RsUniverse {
     pub fn get_index(&self, row: usize, column: usize) -> usize {
-        (row * self.width + column)
+        row * self.width + column
     }
 
 

@@ -1,12 +1,19 @@
 import { DOMElements, EventHandlers } from './common';
 import { GameLoop } from './GameLoop';
-import { WASMDummyRendererFloat, WASMNoBorderRenderer, WASMRenderer1, WASMRenderer2 } from './renderers/WASMRenderers';
+import {
+  WASMDummyRendererFloat,
+  WASMNoBorderRenderer,
+  WASMNoBorderU32Renderer,
+  WASMRenderer1,
+  WASMRenderer2
+} from './renderers/WASMRenderers';
 import { Universe } from './Universe';
 import { JSRenderer } from './renderers/JSRenderer';
 import { JSOptimizedRenderer } from './renderers/JSOptimizedRenderer';
 
 
 const RendererClass = {
+  'WASMNoBorderU32Renderer': WASMNoBorderU32Renderer,
   'WASMNoBorderRenderer':    WASMNoBorderRenderer,
   'WASMRenderer2':           WASMRenderer2,
   'WASMRenderer1':           WASMRenderer1,

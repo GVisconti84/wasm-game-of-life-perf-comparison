@@ -1,4 +1,12 @@
-import { dummyRenderFloat, newFilled, noBorderRender, render1, render2 } from 'wasm-game-of-life-perf-comparison';
+import {
+  dummyRenderFloat,
+  noBorderNew,
+  noBorderRender,
+  noBorderU32New,
+  noBorderU32Render,
+  render1,
+  render2
+} from 'wasm-game-of-life-perf-comparison';
 import { Size } from '../common';
 import { Universe } from '../Universe';
 import { AbstractWASMRenderer } from './AbstractWASMRenderer';
@@ -18,7 +26,14 @@ export class WASMRenderer2 extends AbstractWASMRenderer  {
 
 export class WASMNoBorderRenderer extends AbstractWASMRenderer  {
   constructor(canvas: HTMLCanvasElement, universeSize: Size) {
-    super(canvas, universeSize, newFilled(universeSize.width, universeSize.height));
+    super(canvas, universeSize, noBorderNew(universeSize.width, universeSize.height));
   }
   protected invokeRenderFunction(universe: Universe): void { noBorderRender(this, universe); }
+}
+
+export class WASMNoBorderU32Renderer extends AbstractWASMRenderer  {
+  constructor(canvas: HTMLCanvasElement, universeSize: Size) {
+    super(canvas, universeSize, noBorderU32New(universeSize.width, universeSize.height));
+  }
+  protected invokeRenderFunction(universe: Universe): void { noBorderU32Render(this, universe); }
 }
