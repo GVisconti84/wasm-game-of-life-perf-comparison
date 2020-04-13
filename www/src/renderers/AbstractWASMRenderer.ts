@@ -14,10 +14,11 @@ export abstract class AbstractWASMRenderer extends RsRenderer implements Rendere
 
 
   protected constructor(canvas: HTMLCanvasElement,
-                        private readonly universeSize: Size)
+                        private readonly universeSize: Size,
+                        renderer: RsRenderer = RsRenderer.new(universeSize.width, universeSize.height))
   {
     super();
-    extendFromRust(this, RsRenderer.new(universeSize.width, universeSize.height));
+    extendFromRust(this, renderer);
     super.setCanvasSize(canvas);
     this.ctx = canvas.getContext('2d');
     this.imageData = this.getImageData(canvas.width, canvas.height);

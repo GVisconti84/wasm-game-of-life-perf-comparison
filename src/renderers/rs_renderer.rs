@@ -19,11 +19,7 @@ impl RsRenderer {
             framebuffer: vec![]
         };
 
-        r.framebuffer.resize(
-            r.get_framebuffer_width() * r.get_framebuffer_height() * 4,
-            255
-        );
-
+        r.framebuffer.resize(r.get_framebuffer_len(), 255);
         r
     }
 
@@ -43,6 +39,11 @@ impl RsRenderer {
 
 
 impl RsRenderer {
+    pub(super) fn get_framebuffer_len(&self) -> usize {
+        self.get_framebuffer_width() * self.get_framebuffer_height() * 4
+    }
+
+
     pub(super) fn get_framebuffer_width(&self) -> usize {
         self.width * (CELL_SIZE + CELL_BORDER) + CELL_BORDER
     }

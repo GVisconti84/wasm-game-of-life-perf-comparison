@@ -5,6 +5,7 @@ mod rs_renderer;
 mod rs_dummy_renderer_float;
 mod rs_renderer_1;
 mod rs_renderer_2;
+mod rs_no_border_renderer;
 
 pub mod consts;
 pub use rs_renderer::*;
@@ -25,5 +26,17 @@ pub fn render1(r: &mut RsRenderer, u: &RsUniverse) {
 #[wasm_bindgen]
 pub fn render2(r: &mut RsRenderer, u: &RsUniverse) {
     use rs_renderer_2::*;
+    r.render(u);
+}
+
+#[wasm_bindgen(js_name = newFilled)]
+pub fn new_filled(width: usize, height: usize) -> RsRenderer {
+    use rs_no_border_renderer::*;
+    RsRenderer::new_filled(width, height)
+}
+
+#[wasm_bindgen(js_name = noBorderRender)]
+pub fn no_border_render(r: &mut RsRenderer, u: &RsUniverse) {
+    use rs_no_border_renderer::*;
     r.render(u);
 }
