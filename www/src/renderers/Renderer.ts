@@ -13,10 +13,3 @@ export interface Renderer {
   render(universe: Universe): void;
   destroy(): void;
 }
-
-export interface RsRenderer {
-  getFramebuffer(): number;
-  setCanvasSize(canvas: HTMLCanvasElement): void;
-  render(universe: Universe): void;
-  free(): void
-}

@@ -1,26 +1,31 @@
+import { RsRenderer } from 'wasm-game-of-life-perf-comparison';
 import { memory } from 'wasm-game-of-life-perf-comparison/wasm_game_of_life_perf_comparison_bg';
-import { Position, Size } from '../common';
+import { extendFromRust, Position, Size } from '../common';
 import { Universe } from '../Universe';
-import { CELL_SIZE, RsRenderer } from './Renderer';
+import { CELL_SIZE, Renderer } from './Renderer';
 
 
-export abstract class AbstractWASMRenderer {
+export abstract class AbstractWASMRenderer extends RsRenderer implements Renderer {
   private readonly ctx:       CanvasRenderingContext2D;
   private readonly imageData: ImageData;
 
 
+  protected abstract invokeRenderFunction(universe: Universe): void;
+
+
   protected constructor(canvas: HTMLCanvasElement,
-              private readonly universeSize: Size,
-              private readonly renderer:     RsRenderer)
+                        private readonly universeSize: Size)
   {
-    this.renderer.setCanvasSize(canvas);
+    super();
+    extendFromRust(this, RsRenderer.new(universeSize.width, universeSize.height));
+    super.setCanvasSize(canvas);
     this.ctx = canvas.getContext('2d');
     this.imageData = this.getImageData(canvas.width, canvas.height);
   }
 
 
   public render(universe: Universe): void {
-    this.renderer.render(universe);
+    this.invokeRenderFunction(universe);
     this.ctx.putImageData(this.imageData, 0, 0);
   }
 
@@ -35,7 +40,7 @@ export abstract class AbstractWASMRenderer {
 
 
   private getImageData(width: number, height: number): ImageData {
-    let fbPtr  = this.renderer.getFramebuffer();
+    let fbPtr  = super.getFramebuffer();
 
     return new ImageData(
         new Uint8ClampedArray(memory.buffer, fbPtr, width * height * 4),
@@ -46,6 +51,6 @@ export abstract class AbstractWASMRenderer {
 
 
   destroy() {
-    this.renderer.free();
+    super.free();
   }
 }

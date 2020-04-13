@@ -1,19 +1,17 @@
 import { DOMElements, EventHandlers } from './common';
 import { GameLoop } from './GameLoop';
+import { WASMDummyRendererFloat, WASMRenderer1, WASMRenderer2 } from './renderers/WASMRenderers';
 import { Universe } from './Universe';
-import { DummyRendererFloat } from './renderers/DummyRendererFloat';
-import { WASMRenderer1 } from './renderers/WASMRenderer1';
-import { WASMRenderer2 } from './renderers/WASMRenderer2';
 import { JSRenderer } from './renderers/JSRenderer';
 import { JSOptimizedRenderer } from './renderers/JSOptimizedRenderer';
 
 
 const RendererClass = {
-  'WASMRenderer2':       WASMRenderer2,
-  'WASMRenderer1':       WASMRenderer1,
-  'DummyRendererFloat':  DummyRendererFloat,
-  'JSOptimizedRenderer': JSOptimizedRenderer,
-  'JSRenderer':          JSRenderer,
+  'WASMRenderer2':           WASMRenderer2,
+  'WASMRenderer1':           WASMRenderer1,
+  'WASMDummyRendererFloat':  WASMDummyRendererFloat,
+  'JSOptimizedRenderer':     JSOptimizedRenderer,
+  'JSRenderer':              JSRenderer,
 }
 
 

@@ -111,7 +111,6 @@ impl RsUniverse {
 }
 
 
-use crate::utils::Timer;
 /// Public methods, exported to JavaScript.
 #[wasm_bindgen]
 impl RsUniverse {
