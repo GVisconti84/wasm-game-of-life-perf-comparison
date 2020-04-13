@@ -51,28 +51,6 @@ impl RsRenderer2 {
 
 
     pub fn render(&mut self, universe: &RsUniverse) {
-        // log!("painting.");
-        // let f_width = self.get_framebuffer_width();
-        // let f_height = self.get_framebuffer_height();
-        // let pitch = BPP * f_width;
-        //
-        // let h_factor = 255f64 / f_width  as f64;
-        // let v_factor = 255f64 / f_height as f64;
-        //
-        // for row in 0..f_height {
-        //     let row_offset = row * pitch;
-        //
-        //     for col in 0..f_width {
-        //         let idx = row_offset + col * BPP;
-        //
-        //         // self.framebuffer[idx + 0] = (255 * col / f_width ) as u8;
-        //         // self.framebuffer[idx + 1] = (255 * row / f_height) as u8;
-        //         self.framebuffer[idx + 0] = 255;  // (col as f64 * h_factor ) as u8;
-        //         self.framebuffer[idx + 1] = 255;  // (row as f64 * v_factor) as u8;
-        //         self.framebuffer[idx + 2] = 0;
-        //         self.framebuffer[idx + 3] = 255;
-        //     }
-        // }
         let fb_width = self.get_framebuffer_width();
         let pitch = BPP * fb_width;
         let cells = universe.get_cells();
