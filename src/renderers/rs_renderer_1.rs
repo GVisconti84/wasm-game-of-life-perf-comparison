@@ -14,11 +14,11 @@ impl RsRenderer1 for RsRenderer {
         let cells = universe.get_cells();
 
         let mut row_offset = 0;
-        // Draw the border:  TODO: see if we can fill the array more elegantly.
+        // Draw the grid:  TODO: see if we can fill the array more elegantly.
         // We could fill the first row and then copy here too.
-        // For now I don't bother implementing it since CELL_BORDER is usually 1.
-        let border_len = CELL_BORDER * pitch;
-        for _i in 0..CELL_BORDER {
+        // For now I don't bother implementing it since GRID_SIZE is usually 1.
+        let grid_len = GRID_SIZE * pitch;
+        for _i in 0..GRID_SIZE {
             for j in 0..fb_width {
                 let idx = row_offset + j * BPP;
                 self.framebuffer[idx..idx+BPP].copy_from_slice(GRID_COLOR);
@@ -32,9 +32,9 @@ impl RsRenderer1 for RsRenderer {
             // Draw vertical grid line
             //  we cheat a little bit: we copy from the beginning of the framebuffer.
             let (l, r) = self.framebuffer.split_at_mut(row_offset+col_offset);
-            r[0..CELL_BORDER*BPP].copy_from_slice(&l[0..CELL_BORDER*BPP]);
+            r[0..GRID_SIZE *BPP].copy_from_slice(&l[0..GRID_SIZE *BPP]);
 
-            col_offset += CELL_BORDER * BPP;
+            col_offset += GRID_SIZE * BPP;
 
             // fill first row, and then copy over CELL_SIZE - 1 times.
             for col in 0..self.width {
@@ -58,8 +58,8 @@ impl RsRenderer1 for RsRenderer {
                 // Draw vertical grid line
                 //  we cheat a little bit: we copy from the beginning of the framebuffer.
                 let (l, r) = self.framebuffer.split_at_mut(row_offset+col_offset);
-                r[0..CELL_BORDER*BPP].copy_from_slice(&l[0..CELL_BORDER*BPP]);
-                col_offset += CELL_BORDER * BPP;
+                r[0..GRID_SIZE *BPP].copy_from_slice(&l[0..GRID_SIZE *BPP]);
+                col_offset += GRID_SIZE * BPP;
             }
 
             let block = &mut self.framebuffer[row_offset..row_offset+CELL_SIZE*pitch];
@@ -72,8 +72,8 @@ impl RsRenderer1 for RsRenderer {
 
             // Draw horizontal grid line:
             let (l, r) = self.framebuffer.split_at_mut(row_offset);
-            r[0..border_len].copy_from_slice(&l[0..border_len]);
-            row_offset += border_len;
+            r[0..grid_len].copy_from_slice(&l[0..grid_len]);
+            row_offset += grid_len;
         }
     }
 }

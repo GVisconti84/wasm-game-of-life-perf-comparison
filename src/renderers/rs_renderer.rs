@@ -45,12 +45,12 @@ impl RsRenderer {
 
 
     pub(super) fn get_framebuffer_width(&self) -> usize {
-        self.width * (CELL_SIZE + CELL_BORDER) + CELL_BORDER
+        self.width * (CELL_SIZE + GRID_SIZE) + GRID_SIZE
     }
 
 
     pub(super) fn get_framebuffer_height(&self) -> usize {
-        self.height * (CELL_SIZE + CELL_BORDER) + CELL_BORDER
+        self.height * (CELL_SIZE + GRID_SIZE) + GRID_SIZE
     }
 }
 

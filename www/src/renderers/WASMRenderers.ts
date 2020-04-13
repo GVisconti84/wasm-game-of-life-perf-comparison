@@ -1,9 +1,9 @@
 import {
   dummyRenderFloat,
-  noBorderNew,
-  noBorderRender,
-  noBorderU32New,
-  noBorderU32Render,
+  noGridNew,
+  noGridRender,
+  noGridU32New,
+  noGridU32Render,
   render1,
   render2
 } from 'wasm-game-of-life-perf-comparison';
@@ -24,16 +24,16 @@ export class WASMRenderer2 extends AbstractWASMRenderer  {
   protected invokeRenderFunction(universe: Universe): void { render2(this, universe); }
 }
 
-export class WASMNoBorderRenderer extends AbstractWASMRenderer  {
+export class WASMNoGridRenderer extends AbstractWASMRenderer  {
   constructor(canvas: HTMLCanvasElement, universeSize: Size) {
-    super(canvas, universeSize, noBorderNew(universeSize.width, universeSize.height));
+    super(canvas, universeSize, noGridNew(universeSize.width, universeSize.height));
   }
-  protected invokeRenderFunction(universe: Universe): void { noBorderRender(this, universe); }
+  protected invokeRenderFunction(universe: Universe): void { noGridRender(this, universe); }
 }
 
-export class WASMNoBorderU32Renderer extends AbstractWASMRenderer  {
+export class WASMNoGridU32Renderer extends AbstractWASMRenderer  {
   constructor(canvas: HTMLCanvasElement, universeSize: Size) {
-    super(canvas, universeSize, noBorderU32New(universeSize.width, universeSize.height));
+    super(canvas, universeSize, noGridU32New(universeSize.width, universeSize.height));
   }
-  protected invokeRenderFunction(universe: Universe): void { noBorderU32Render(this, universe); }
+  protected invokeRenderFunction(universe: Universe): void { noGridU32Render(this, universe); }
 }

@@ -2,8 +2,8 @@ import { DOMElements, EventHandlers } from './common';
 import { GameLoop } from './GameLoop';
 import {
   WASMDummyRendererFloat,
-  WASMNoBorderRenderer,
-  WASMNoBorderU32Renderer,
+  WASMNoGridRenderer,
+  WASMNoGridU32Renderer,
   WASMRenderer1,
   WASMRenderer2
 } from './renderers/WASMRenderers';
@@ -13,18 +13,18 @@ import { JSOptimizedRenderer } from './renderers/JSOptimizedRenderer';
 
 
 const RendererClass = {
-  'WASMNoBorderU32Renderer': WASMNoBorderU32Renderer,
-  'WASMNoBorderRenderer':    WASMNoBorderRenderer,
-  'WASMRenderer2':           WASMRenderer2,
-  'WASMRenderer1':           WASMRenderer1,
-  'WASMDummyRendererFloat':  WASMDummyRendererFloat,
-  'JSOptimizedRenderer':     JSOptimizedRenderer,
-  'JSRenderer':              JSRenderer,
+  'WASMNoGridU32Renderer':  WASMNoGridU32Renderer,
+  'WASMNoGridRenderer':     WASMNoGridRenderer,
+  'WASMRenderer2':          WASMRenderer2,
+  'WASMRenderer1':          WASMRenderer1,
+  'WASMDummyRendererFloat': WASMDummyRendererFloat,
+  'JSOptimizedRenderer':    JSOptimizedRenderer,
+  'JSRenderer':             JSRenderer,
 }
 
 
 export class Game extends GameLoop {
-  private readonly domElements: DOMElements
+  private readonly domElements: DOMElements;
   private readonly handlers:    EventHandlers;
 
 
